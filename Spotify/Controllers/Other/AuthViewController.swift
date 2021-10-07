@@ -11,7 +11,7 @@ import WebKit
 class AuthViewController: UIViewController {
     
     var successHandler: ((Bool) -> Void)?
-    
+        
     private let webview: WKWebView = {
         let prefs = WKWebpagePreferences()
         prefs.allowsContentJavaScript = true

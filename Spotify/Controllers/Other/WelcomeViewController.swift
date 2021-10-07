@@ -12,34 +12,110 @@ class WelcomeViewController: UIViewController {
     private let signButton: UIButton = {
         let button = UIButton()
         
-        button.backgroundColor = .white
+        button.backgroundColor = .systemGreen
         button.setTitle("Entrar com o Spotify", for: .normal)
-        button.setTitleColor(.blue, for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.layer.cornerRadius = 20
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         
         return button
+    }()
+    
+    
+    private let borderedButton: UIButton = {
+        let button = UIButton()
+        
+        button.setImage(UIImage(systemName: "iphone.homebutton"), for: .normal)
+        button.tintColor = .white
+        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.numberOfLines = 2
+        button.backgroundColor = .clear
+        button.setTitle("Continuar com um número de telefone", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        button.layer.cornerRadius = 20
+        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.gray.cgColor
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        
+        return button
+    }()
+    
+    lazy private var backgroundImage: UIImageView = {
+        let backgroundImage = UIImageView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height/2))
+        
+        backgroundImage.image = UIImage(named: "musica")
+        
+        backgroundImage.contentMode = .scaleAspectFill
+        
+        return backgroundImage
+    }()
+    
+    
+    lazy private var iconImage: UIImageView = {
+        let icon = UIImageView(frame: CGRect(x: view.bounds.width / 2.4, y: view.frame.height/2.8, width: 60, height: 60))
+
+        icon.image = UIImage(named: "mini-icon")
+        
+        return icon
+    }()
+    
+    lazy private var titleLabel: UILabel = {
+        let title = UILabel()
+        
+        title.text = "Milhões de músicas á sua escolha.\nGrátis no Spotify"
+        title.numberOfLines = 2
+        title.textAlignment = .center
+        title.textColor = .white
+        title.font = UIFont.boldSystemFont(ofSize: 20)
+        
+        return title
+    }()
+    
+    private var gradient: CAGradientLayer = {
+        let gradient = CAGradientLayer()
+        
+        gradient.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
+        
+        return gradient
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Spotify"
-        
-        view.backgroundColor = .systemGreen
-        
-        view.addSubview(signButton)
-        
-        signButton.addTarget(self, action: #selector(onTapButtonSignIn), for: .touchUpInside)
+        setupLayout()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    private func setupLayout(){
+        view.backgroundColor = .black
         
-        signButton.frame = CGRect(
-            x: 20,
-            y: view.height - 50 - view.safeAreaInsets.bottom,
-            width: view.width - 40,
-            height: 50
-        )
+        view.addSubview(backgroundImage)
+        view.addSubview(iconImage)
+        view.addSubview(titleLabel)
+        view.addSubview(signButton)
+        view.addSubview(borderedButton)
+        
+        gradient.frame = backgroundImage.frame
+        
+        backgroundImage.layer.insertSublayer(gradient, at: 0)
+        
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        signButton.translatesAutoresizingMaskIntoConstraints = false
+        borderedButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        titleLabel.topAnchor.constraint(equalTo: iconImage.bottomAnchor, constant: 10).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        
+        signButton.addSize(width: view.frame.width - 50, height: 50)
+        signButton.topAnchor.constraint(equalTo: backgroundImage.bottomAnchor, constant: 50).isActive = true
+        signButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        borderedButton.addSize(width: view.frame.width - 50, height: 50)
+        borderedButton.topAnchor.constraint(equalTo: signButton.bottomAnchor, constant: 10).isActive = true
+        borderedButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        signButton.addTarget(self, action: #selector(onTapButtonSignIn), for: .touchUpInside)
     }
     
     @objc func onTapButtonSignIn(){
@@ -51,6 +127,8 @@ class WelcomeViewController: UIViewController {
         let authVC = AuthViewController()
         
         authVC.navigationItem.largeTitleDisplayMode = .never
+        
+        authVC.navigationItem.backButtonTitle = "Voltar"
         
         authVC.successHandler = {[weak self] success in
             DispatchQueue.main.async {
