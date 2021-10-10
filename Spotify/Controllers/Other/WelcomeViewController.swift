@@ -25,18 +25,17 @@ class WelcomeViewController: UIViewController {
     private let borderedButton: UIButton = {
         let button = UIButton()
         
-        button.setImage(UIImage(systemName: "iphone.homebutton"), for: .normal)
         button.tintColor = .white
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.numberOfLines = 2
         button.backgroundColor = .clear
-        button.setTitle("Continuar com um número de telefone", for: .normal)
+        button.setTitle("Continuar com um núemro de telefone", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         button.layer.cornerRadius = 20
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.gray.cgColor
-        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        button.contentHorizontalAlignment = .center
         
         return button
     }()
@@ -128,7 +127,7 @@ class WelcomeViewController: UIViewController {
         
         authVC.navigationItem.largeTitleDisplayMode = .never
         
-        authVC.navigationItem.backButtonTitle = "Voltar"
+        navigationItem.backButtonTitle = "Voltar"
         
         authVC.successHandler = {[weak self] success in
             DispatchQueue.main.async {
